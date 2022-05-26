@@ -1,0 +1,272 @@
+\section{Implementation}\label{sec:imp}
+Here given some Data Definition Language(DDL) query which are used in our system\\
+Listing~\ref{list:sql}   
+\begin{lstlisting}[caption={ A SQL command for Creating table named USERS}, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+        ]
+CREATE TABLE users (
+  ID int(16) UNSIGNED NOT NULL,
+  username varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  email varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  password varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  role varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  name varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  address varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  phone varchar(14) COLLATE utf8_unicode_ci NOT NULL,
+  date datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+\end{lstlisting}
+	\begin{lstlisting}[caption={A SQL command for setting primary key. }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+        ]		 
+ ALTER TABLE flat_info
+  ADD PRIMARY KEY (ID);
+\end{lstlisting}
+\begin{lstlisting}[caption={A SQL command for setting primary key.}, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ALTER TABLE users
+  ADD PRIMARY KEY (ID);
+\end{lstlisting}
+\begin{lstlisting}[caption={A SQL command for Creating table named booking-info}, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+CREATE TABLE bookinginfo (
+  bookID int(16) UNSIGNED NOT NULL,
+  userID int(16) UNSIGNED NOT NULL,
+  flatID int(16) UNSIGNED NOT NULL,
+  date datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+\end{lstlisting}
+\begin{lstlisting}[caption={A SQL command for Creating table named Flat-info}, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+CREATE TABLE flatinfo (
+  flatID int(16) UNSIGNED NOT NULL,
+  userID int(16) UNSIGNED NOT NULL,
+  status enum('Available','Booked','Trash') COLLATE utf8_unicode_ci DEFAULT 'Available',
+  type enum('Flat','Mess','Cottage') COLLATE utf8_unicode_ci DEFAULT 'Flat',
+  floor varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  rent int(10) NOT NULL,
+  room varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  address varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  mobile varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  facID int(16) UNSIGNED NOT NULL,
+  date datetime NOT NULL,
+  images longtext COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+\end{lstlisting}
+\begin{lstlisting}[caption={A SQL command for Creating table named logInfo}, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ CREATE TABLE loginfo (
+  logID int(16) UNSIGNED NOT NULL,
+  userID int(16) UNSIGNED NOT NULL,
+  ipAddress varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  os varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  browser varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  date datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption={A SQL command for Creating table named user-role}, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+SELECT * FROM user_role WHERE roleID = '$role_Id';
+           
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A SQL command for  connecting   logInfo and user }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ SELECT user.*, loginfo.logID, loginfo.userID FROM loginfo    RIGHT JOIN user on loginfo.userID = user.userID WHERE       loginfo.logID = '$logID' AND loginfo.securityKey='$logKey;
+           
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A SQL command for  connecting     flatinfo  and facilities }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ SELECT flatinfo.*, facilities.*, facilities.facID AS facID   FROM flatinfo LEFT JOIN facilities ON flatinfo.facID =      facilities.facID ORDER BY date ASC;
+           
+\end{lstlisting}
+
+%ccccc
+\begin{lstlisting}[caption={A SQL command for deleting     flatinfo  }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ DELETE FROM flatinfo WHERE userID='$user_id' AND flatID='$id';
+           
+\end{lstlisting}
+
+ 
+\begin{lstlisting}[caption={A SQL command for  Setting status     flatinfo  }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ UPDATE flatinfo SET status='Booked', bookedUser='$user_i' WHERE flatID='$id' AND userID='$user_id';
+           
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A SQL command for updating status  flatinfo  }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ UPDATE flatinfo SET status='Available', bookedUser=NULL      WHERE flatID='$id' AND userID='$user_id';
+           
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A SQL command for finding username from user table }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+SELECT * FROM user WHERE username='$username';
+           
+\end{lstlisting}
+
+\begin{lstlisting}[caption={A SQL command for update user }, label=list:sql, captionpos=b,
+           backgroundcolor=\color{white},
+           language=SQL,
+           breaklines=true,
+           frame=single,
+           showspaces=false,
+           basicstyle=\ttfamily,
+           numbers=left,
+           numberstyle=\tiny,
+           rulecolor=\color{red},
+           keywordstyle=\color{blue},
+           commentstyle=\color{gray}
+           ]
+ UPDATE user SET password='$password', email='$email',roleID='$type', name='$name', address='$address',phone='$phone' WHERE userID='$uid';
+           
+\end{lstlisting}
+
+          
+\\
